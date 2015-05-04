@@ -1,0 +1,34 @@
+{
+  "name": "dolink-counter",
+  "version": "0.0.1",
+  "description": "Dolink Counter",
+  "main": "./libs/index.js",
+  "devDependencies": {
+    "nino": "git+ssh://git@bitbucket.org:ollomind/nino.git#develop-1.0",
+    "sira-core": "taoyuan/sira-core",
+    "logs": "0.0.7",
+    "chai": "^1.10.0",
+    "sira": "taoyuan/sira",
+    "sira-express-veriuser": "taoyuan/sira-express-veriuser",
+    "jugglingdb-redis-hq": "0.0.12",
+    "log4js": "^0.6.21",
+    "supertest": "^0.13.0",
+    "express": "latest",
+    "musher": "lizhaogai/musher.js"
+  },
+  "scripts": {
+    "test": "mocha test/*.test.js"
+  },
+  "author": "Li Zhaogai",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "underscore": "^1.7.0",
+    "lodash": "^2.4.1",
+    "require-all": "0.0.8",
+    "iweibo": "git://github.com/lizhaogai/weibo",
+    "jayson": "lizhaogai/jayson",
+    "async": "^0.9.0"
+  }
+}
