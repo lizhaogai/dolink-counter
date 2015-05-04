@@ -9,7 +9,7 @@ var COMMENTS_URL = "https://api.weibo.com/2/statuses/update.json";
 module.exports.init = function (napp) {
     this.napp = napp;
     this.UserCredential = napp.model('UserCredential');
-    iweibo.set(app.get('weibo'));
+    iweibo.set(napp.get('weibo'));
 };
 
 module.exports.execute = function (settings, cb) {

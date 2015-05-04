@@ -11,7 +11,7 @@ module.exports = function (t) {
             type: {type: String, index: true},
             enable: {type: Boolean, index: true},
             lastUpdate: {type: Date},
-            settings: {type: t.JSON, index: true}
+            settings: {type: t.JSON}
         },
         acls: [
             {

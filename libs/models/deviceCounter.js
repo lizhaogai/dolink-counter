@@ -1,13 +1,13 @@
 "use strict";
 
 var _ = require('lodash');
-module.exports = function (DeviceCounter) {
+module.exports = function (DeviceCounter, napp) {
 
     DeviceCounter.validatesPresenceOf('ownerId', 'deviceId');
 
     DeviceCounter.serviceState = function (ownerId, type, cb) {
-        var self = this;
-        self.UserCredential.findOne({
+        var UserCredential = napp.model('UserCredential');
+        UserCredential.findOne({
             where: {
                 userId: ownerId,
                 provider: type + '-link'
@@ -66,7 +66,7 @@ module.exports = function (DeviceCounter) {
         http: {verb: 'get', path: '/:deviceId'}
     });
 
-    DeviceCounter.expose('channelEnabled', {
+    DeviceCounter.expose('serviceState', {
         accepts: [
             {
                 arg: 'ownerId', type: 'string',
@@ -81,22 +81,4 @@ module.exports = function (DeviceCounter) {
         },
         http: {verb: 'get', path: '/service/:type/state'}
     });
-
-    //DeviceCounter.expose('getEnabledSetting', {
-    //    accepts: [
-    //        {
-    //            arg: 'ownerId', type: 'string',
-    //            source: function (ctx) {
-    //                return ctx.req.accessToken && ctx.req.accessToken.userId;
-    //            }
-    //        },
-    //        {arg: 'deviceId', type: 'string'},
-    //        {arg: 'data', type: 'object', source: 'body'}
-    //    ],
-    //    returns: {
-    //        arg: 'result', type: 'object', root: true
-    //    },
-    //    http: {verb: 'get', path: '/:deviceId'}
-    //});
-
 };
