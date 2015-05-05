@@ -11,6 +11,7 @@ module.exports = function (t) {
             type: {type: String, index: true},
             enable: {type: Boolean, index: true},
             lastUpdate: {type: Date},
+            ttl: {type: Number},
             settings: {type: t.JSON}
         },
         acls: [
@@ -29,7 +30,7 @@ module.exports = function (t) {
                 principalType: sec.ROLE,
                 principalId: sec.AUTHENTICATED,
                 permission: sec.ALLOW,
-                property: "findSettings"
+                property: "getSettings"
             },
             {
                 principalType: sec.ROLE,

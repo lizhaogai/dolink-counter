@@ -6,43 +6,67 @@ var FANS_URL = "https://api.weibo.com/2/users/counts.json";
 var FORWARD_URL = "https://api.weibo.com/2/statuses/update.json";
 var COMMENTS_URL = "https://api.weibo.com/2/statuses/update.json";
 
+var request = require('request');
+
 module.exports.init = function (napp) {
     this.napp = napp;
-    this.UserCredential = napp.model('UserCredential');
     iweibo.set(napp.get('weibo'));
 };
 
-module.exports.execute = function (settings, cb) {
+module.exports.execute = function (ownerId, settings, cb) {
     var self = this;
-    self.UserCredential.findOne({
+    var UserCredential = self.napp.model('UserCredential');
+    UserCredential.findOne({
         where: {
-            userId: settings.ownerId,
+            userId: ownerId,
             provider: provider
         }
     }, function (err, userCredential) {
         if (err)
             return cb(err);
         if (settings.dataType = "fans") {
-            return self.fansCount({token: userCredential.credentials.accessToken, content: {}}, cb);
+            return self.fansCount({
+                token: userCredential.credentials.accessToken,
+                content: {
+                    uids: userCredential.externalId,
+                    access_token: userCredential.credentials.accessToken
+                }
+            }, cb);
         }
 
-    });
-};
+    })
+}
 
 module.exports.fansCount = function (settings, cb) {
-    var content = encodeURIComponent(settings.content);
-    var weibo = new iweibo.Weibo(settings.token, null);
+    //var weibo = new iweibo.Weibo(settings.token, null);
 
-    var postData = querystring.stringify(content);
-    var postHeader = {
-        'Content-Type': 'application/x-www-form-urlencoded'
-    };
-    return weibo.request('GET', FANS_URL, postHeader, postData, settings.token, function (err, obj) {
+    var postData = querystring.stringify(settings.content);
+
+    return request.get(FANS_URL + "?" + postData, function (err, response) {
         if (err) {
-            console.log(obj);
+            return cb(err);
         }
-        cb(null, obj['followers_count']);
+        if (response && response.statusCode == 200) {
+            try {
+                var obj = JSON.parse(response.body)
+                cb(null, obj[0] && obj[0]['followers_count'])
+            } catch (e) {
+                cb(e);
+            }
+
+        }
     });
+    //var postHeader = {
+    //    'Content-Type': 'application/x-www-form-urlencoded'
+    //};
+    //return weibo.request('GET', FANS_URL, postHeader, postData, settings.token, function (err, obj) {
+    //    if (err) {
+    //        console.log(err);
+    //    }
+    //    if (obj) {
+    //        cb(null, obj['followers_count']);
+    //    }
+    //});
 };
 
 module.exports.commentCount = function (settings) {

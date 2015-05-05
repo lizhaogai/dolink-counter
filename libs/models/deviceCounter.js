@@ -3,7 +3,7 @@
 var _ = require('lodash');
 module.exports = function (DeviceCounter, napp) {
 
-    DeviceCounter.validatesPresenceOf('ownerId', 'deviceId');
+    DeviceCounter.validatesPresenceOf('deviceId');
 
     DeviceCounter.serviceState = function (ownerId, type, cb) {
         var UserCredential = napp.model('UserCredential');
@@ -20,9 +20,14 @@ module.exports = function (DeviceCounter, napp) {
     };
 
     DeviceCounter.updateSettings = function (ownerId, deviceId, data, cb) {
-        DeviceCounter.findOrCreate({where: {ownerId: ownerId, deviceId: deviceId}}, function (err, deviceCounter) {
-            if (err) return cb(null);
-            deviceCounter.updateAttributes({settings: data}, cb);
+        DeviceCounter.findOrCreate({where: {deviceId: deviceId}}, function (err, deviceCounter) {
+            if (err) return cb(err);
+            deviceCounter.updateAttributes({
+                settings: data.settings,
+                type: data.type,
+                ownerId: ownerId,
+                ttl: data.ttl
+            }, cb);
         });
     };
 

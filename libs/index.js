@@ -16,35 +16,42 @@ function Counter(napp, adapters) {
         adapter.init(napp);
     });
 
-    var channel = napp.bus.subscribe('node');
-    channel.on('data', function (message) {
+    var channel = napp.bus.subscribe('$device/:did/channel/:cid/event/:eventName');
+    channel.on('data', function (message, router) {
         if (message) {
-            self.onData(message);
+            self.onData(router.params.did, router.params.cid, message);
         }
     });
 }
 
-Counter.prototype.onData = function (message) {
+Counter.prototype.onData = function (deviceId, channelId, message) {
     var self = this;
     var DeviceCounter = this.napp.model('DeviceCounter');
     DeviceCounter.findOne({
         where: {
-            ownerId: message.ownerId,
-            deviceId: message.deviceId
+            deviceId: deviceId
         }
     }, function (err, deviceCounter) {
         if (err) return;
         if (!deviceCounter) return;
         var settings = deviceCounter.settings;
 
-        //TODO find the channel, judge if it is timeout now
+        if ((new Date()) - deviceCounter.lastUpdate < deviceCounter.ttl * 1000) {
+            return;
+        }
 
-        settings.ownerId = message.ownerId;
-        if (this.adapters[deviceCounter.type] && this.adapters[deviceCounter.type].execute) {
-            this.adapters[deviceCounter.type].execute(settings, function (err, result) {
+        if (self.adapters[deviceCounter.type] && self.adapters[deviceCounter.type].execute) {
+            self.adapters[deviceCounter.type].execute(deviceCounter.ownerId, settings, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
                 if (!err) {
-                    if (self.napp.rpcClient().channel(message.deviceId, message.channelId) && self.napp.rpcClient().channel(message.deviceId, message.channelId).display)
-                        self.napp.rpcClient().channel(message.deviceId, message.channelId).display(result);
+                    if (self.napp.rpcClient.channel(deviceId, channelId)) {
+                        deviceCounter.updateAttributes({lastUpdate: new Date()});
+                        self.napp.rpcClient.channel(deviceId, channelId).request('display', {text: result}, function () {
+                        });
+                    }
                 }
             });
         }
