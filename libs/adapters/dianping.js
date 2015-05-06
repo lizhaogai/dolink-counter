@@ -1,29 +1,35 @@
 var request = require('request');
 var querystring = require('querystring');
+var log = require('logs').get('dolink:counter:dianping');
 
 var DIANPING_URL = "http://api.dianping.com/v1/business/get_single_business";
 
 module.exports.init = function (napp) {
+    log.debug('Start initializing...');
     this.napp = napp;
     this.keys = napp.get('dianping');
+    log.debug('End initializing...');
 };
 
 module.exports.execute = function (ownerId, settings, cb) {
     var self = this;
-
+    log.debug('Start access weibo service');
     var postData = querystring.stringify({
         appkey: self.keys.appkey,
         business_id: settings['business_id'],
         sign: sign({business_id: settings['business_id']}, self.keys.appkey, self.keys.appsecret)
     });
 
+    log.debug('Get dianping avg_rating');
     return request.get(DIANPING_URL + "?" + postData, function (err, response) {
         if (err) {
+            log.debug("Error get dianping avg_rating");
             return cb(err);
         }
         if (response && response.statusCode == 200) {
             try {
-                var obj = JSON.parse(response.body)
+                var obj = JSON.parse(response.body);
+                log.debug('Dianping avg_rating:', obj.businesses && obj.businesses[0] && obj.businesses[0]['avg_rating']);
                 cb(null, obj.businesses && obj.businesses[0] && obj.businesses[0]['avg_rating'])
             } catch (e) {
                 cb(e);

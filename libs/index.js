@@ -2,6 +2,7 @@
 
 var requireAll = require('require-all');
 var _ = require('lodash');
+var log = require('logs').get('dolink:counter');
 
 exports.init = function (napp) {
     var adapters = requireAll(__dirname + '/adapters');
@@ -9,6 +10,7 @@ exports.init = function (napp) {
 };
 
 function Counter(napp, adapters) {
+    log.debug('Start initialize...');
     var self = this;
     this.napp = napp;
     this.adapters = adapters;
@@ -18,10 +20,10 @@ function Counter(napp, adapters) {
 
     var channel = napp.bus.subscribe('$device/:did/channel/:cid/event/:eventName');
     channel.on('data', function (message, router) {
-        if (message) {
-            self.onData(router.params.did, router.params.cid, message);
-        }
+        self.onData(router.params.did, router.params.cid, message);
+
     });
+    log.debug('End initialize...');
 }
 
 Counter.prototype.onData = function (deviceId, channelId, message) {
@@ -36,7 +38,9 @@ Counter.prototype.onData = function (deviceId, channelId, message) {
         if (!deviceCounter) return;
         var settings = deviceCounter.settings;
 
+        log.debug('Find device counter settings for', deviceId);
         if ((new Date()) - deviceCounter.lastUpdate < deviceCounter.ttl * 1000) {
+            log.debug('Device not time out, finish');
             return;
         }
 
