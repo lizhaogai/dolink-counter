@@ -27,6 +27,7 @@
     "underscore": "^1.7.0",
     "lodash": "^2.4.1",
     "log4js": "^0.6.24",
+    "request": "2.55.0",
     "logs": "0.0.7",
     "require-all": "0.0.8",
     "iweibo": "git://github.com/lizhaogai/weibo",
