@@ -9,10 +9,26 @@ var COMMENTS_URL = "https://api.weibo.com/2/statuses/update.json";
 
 var request = require('request');
 
+var config = {};
+try {
+    config = require('./weibo/providers.json');
+} catch (err) {
+    console.trace(err);
+    process.exit(1); // fatal
+}
+
 module.exports.init = function (napp) {
     log.debug('Start initializing...');
     this.napp = napp;
     log.debug('End initializing...');
+
+    this.napp.on("configurator ready", function () {
+        for (var s in config) {
+            var c = config[s];
+            c.session = c.session !== false;
+            napp.credsConfigurator.configureProvider(s, c);
+        }
+    });
 };
 
 module.exports.execute = function (ownerId, settings, cb) {

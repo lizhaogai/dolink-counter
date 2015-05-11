@@ -1,0 +1,18 @@
+{
+  "weibo-link": {
+    "provider": "weibo",
+    "module": "passport-weibo",
+    "strategy": "Strategy",
+    "clientID": "3081425451",
+    "clientSecret": "5369e3dca885d4599335c9e0b77bb7c9",
+    "callbackURL": "https://beta.dolink.io/dc/link/weibo/callback",
+    "authPath": "/dc/link/weibo",
+    "callbackPath": "/dc/link/weibo/callback",
+    "successRedirect": "/dc/weibo",
+    "scope": [
+      "email",
+      "profile"
+    ],
+    "link": true
+  }
+}
