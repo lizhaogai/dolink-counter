@@ -7,7 +7,7 @@ var log = require('logs').get('dolink:counter');
 exports.init = function (napp) {
     var adapters = requireAll(__dirname + '/adapters');
     // other static resources
-    napp.app.use(napp.app.express.static(__dirname + '/adapters', {maxAge: 0}));
+    napp.app.use(napp.app.express.static(__dirname + '/..' + '/public', {maxAge: 0}));
     return new Counter(napp, adapters);
 };
 

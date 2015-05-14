@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from flatfull.com/themes/first/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 22 Apr 2015 10:04:51 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>Mobile first web app theme | first</title>
+    <meta name="description" content="mobile first, app, web app, responsive, admin dashboard, flat, flat ui">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="css/font.css">
+    <link rel="stylesheet" href="css/app.v2.css" type="text/css"/>
+    <link rel="stylesheet" href="css/responsivegridsystem.css"/>
+    <link rel="stylesheet" href="css/flapclock.css"/>
+    <!--[if lt IE 9]>
+    <script src="js/ie/respond.min.js"></script>
+    <script src="js/ie/html5.js"></script>
+    <script src="js/ie/excanvas.js"></script> <![endif]--></head>
+<body>
+<!-- / nav -->
+<section id="content">
+    <section class="main padder">
+        <div class="row" style="margin-top:15px;">
+            <div class="col-lg-12"> <!-- sparkline stats -->
+                <section class="panel">
+                    <header class="panel-heading">
+                        <ul class="nav nav-pills pull-right">
+                            <li><a href="#" class="panel-toggle text-muted"><i
+                                    class="fa fa-cog text-active"></i><i
+                                    class="fa fa-cog text"></i></a></li>
+                        </ul>
+                        <span>李兆盖的微博粉丝数</span>
+                    </header>
+                    <ul class="list-group">
+                        <li class="list-group-item" style="padding: 8px;">
+                            <div class="media">
+                                <div class="clocky"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+                <!-- sparkline stats end --> </div>
+        </div>
+    </section>
+</section>
+<!-- .modal -->
+
+<script src="js/app.v2.js"></script>
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="js/symbol_map.js"></script>
+<script type="text/javascript" src="js/flapit_parsers.js"></script>
+<script type="text/javascript" src="js/flap_clock.js"></script>
+<script>
+    var flapclock = $('.clocky').flapClock({
+        value: 'facebook 1000',
+        animation: "realistic",
+        mode: "virtual",
+        width: 340
+    });
+</script>
+</body>
+<!-- Mirrored from flatfull.com/themes/first/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 22 Apr 2015 10:05:00 GMT -->
+</html>
