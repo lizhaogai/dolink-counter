@@ -16,6 +16,6 @@ module.exports = function (Dc, napp) {
         returns: {
             arg: 'result', type: 'object', root: true
         },
-        http: {verb: 'get', path: '/'}
+        http: {verb: 'get', path: '/weixin'}
     });
 };
